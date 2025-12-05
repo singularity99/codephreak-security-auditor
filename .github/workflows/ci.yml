@@ -1,0 +1,320 @@
+name: CodePhreak Security Auditor CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+    
+    - name: Run linting
+      run: |
+        black --check src/ tests/
+        isort --check-only src/ tests/
+        flake8 src/ tests/
+        mypy src/
+    
+    - name: Run unit tests
+      run: |
+        pytest tests/unit/ -v --cov=codephreak --cov-report=xml --cov-report=term-missing
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-${{ matrix.python-version }}
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install security tools
+      run: |
+        # Install essential open source security tools
+        pip install semgrep bandit safety
+        
+        # Install Trivy
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+        
+        # Install Gitleaks
+        wget -qO- https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_linux_x64.tar.gz | tar xvz -C /usr/local/bin gitleaks
+        
+        # Install Checkov
+        pip install checkov
+        
+        # Install Hadolint
+        wget -qO /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+        chmod +x /usr/local/bin/hadolint
+    
+    - name: Install CodePhreak Security Auditor
+      run: |
+        pip install -e .[dev,enhanced]
+    
+    - name: Run integration tests
+      run: |
+        pytest tests/integration/ -v --timeout=300
+    
+    - name: Test CLI functionality
+      run: |
+        # Test basic CLI commands
+        codephreak-audit --help
+        codephreak-audit doctor --check-deps
+        codephreak-audit tools
+        
+        # Test configuration generation
+        codephreak-audit init-config test-config.yml
+        cat test-config.yml
+
+  security-scan:
+    name: Security Scan (Self-Dogfooding)
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install security tools
+      run: |
+        # Core security tools
+        pip install semgrep bandit safety
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+        wget -qO- https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_8.18.0_linux_x64.tar.gz | tar xvz -C /usr/local/bin gitleaks
+        pip install checkov
+    
+    - name: Install CodePhreak Security Auditor
+      run: |
+        pip install -e .
+    
+    - name: Run security audit on self
+      run: |
+        # Run quick security check on the project itself
+        codephreak-audit \
+          --target . \
+          --workflow quick-check \
+          --format json,sarif \
+          --output security-results/ \
+          --fail-on critical,high
+    
+    - name: Upload SARIF results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: security-results/security_results.sarif
+    
+    - name: Archive security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: security-results/
+
+  docker-test:
+    name: Docker Integration Test
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
+      run: |
+        docker build -t codephreak-security-auditor:test -f docker/Dockerfile .
+    
+    - name: Test Docker functionality
+      run: |
+        # Test Docker container execution
+        docker run --rm -v $(pwd):/workspace codephreak-security-auditor:test \
+          --target /workspace \
+          --workflow quick-check \
+          --format json
+
+  performance-test:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies and tools
+      run: |
+        pip install -e .[dev,enhanced]
+        pip install semgrep bandit
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+    
+    - name: Create test project
+      run: |
+        mkdir -p test-project/src
+        # Create a sample Python project with various files
+        cat > test-project/requirements.txt << EOF
+        flask==2.0.1
+        requests==2.25.1
+        numpy==1.21.0
+        EOF
+        
+        cat > test-project/src/app.py << 'EOF'
+        import flask
+        import subprocess
+        import os
+        
+        app = flask.Flask(__name__)
+        
+        @app.route('/exec')
+        def exec_command():
+            cmd = flask.request.args.get('cmd')
+            result = subprocess.call(cmd, shell=True)  # Security vulnerability
+            return str(result)
+        
+        if __name__ == '__main__':
+            app.run(debug=True)  # Security issue
+        EOF
+        
+        cat > test-project/Dockerfile << 'EOF'
+        FROM python:3.9
+        COPY requirements.txt .
+        RUN pip install -r requirements.txt
+        COPY src/ /app/
+        CMD ["python", "/app/app.py"]
+        EOF
+    
+    - name: Run performance benchmark
+      run: |
+        echo "## Performance Benchmark Results" > performance-report.md
+        echo "| Workflow | Duration | Findings | Tools Used |" >> performance-report.md
+        echo "|----------|----------|----------|------------|" >> performance-report.md
+        
+        # Quick check benchmark
+        start_time=$(date +%s)
+        codephreak-audit --target test-project --workflow quick-check --format json --output quick-results/
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        findings=$(jq '.vulnerabilities | length' quick-results/security_report.json)
+        echo "| Quick Check | ${duration}s | ${findings} | Semgrep, Trivy, Gitleaks |" >> performance-report.md
+        
+        # Full audit benchmark (with timeout)
+        start_time=$(date +%s)
+        timeout 300 codephreak-audit --target test-project --workflow full-audit --format json --output full-results/ || true
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        if [ -f "full-results/security_report.json" ]; then
+          findings=$(jq '.vulnerabilities | length' full-results/security_report.json)
+        else
+          findings="Timeout"
+        fi
+        echo "| Full Audit | ${duration}s | ${findings} | All Tools |" >> performance-report.md
+        
+        cat performance-report.md
+    
+    - name: Upload performance report
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-report
+        path: performance-report.md
+
+  build-distribution:
+    name: Build Distribution
+    runs-on: ubuntu-latest
+    needs: [test, integration-tests, security-scan]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip build twine
+    
+    - name: Build distribution
+      run: |
+        python -m build
+    
+    - name: Check distribution
+      run: |
+        python -m twine check dist/*
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-distribution
+        path: dist/
+
+  notify-success:
+    name: Notify Success
+    runs-on: ubuntu-latest
+    needs: [test, integration-tests, security-scan, docker-test, performance-test]
+    if: success()
+    
+    steps:
+    - name: Success notification
+      run: |
+        echo "🎉 All CodePhreak Security Auditor CI checks passed!"
+        echo "✅ Tests: Passed"
+        echo "✅ Integration: Passed" 
+        echo "✅ Security Scan: Passed"
+        echo "✅ Docker: Passed"
+        echo "✅ Performance: Passed"
