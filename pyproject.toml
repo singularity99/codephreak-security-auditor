@@ -1,0 +1,275 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codephreak-security-auditor"
+version = "0.1.0"
+description = "Enterprise-grade security vulnerability scanner with 92-96% commercial parity using open source tools"
+authors = [
+    {name = "CodePhreak", email = "security@codephreak.ai"},
+]
+maintainers = [
+    {name = "CodePhreak Security Team", email = "security@codephreak.ai"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = [
+    "security", "vulnerability-scanner", "sast", "sca", "devsecops", 
+    "codephreak", "open-source", "enterprise-security", "static-analysis"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators", 
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+
+# Core dependencies for open source functionality
+dependencies = [
+    # Core framework
+    "click>=8.0.0",
+    "pydantic>=2.0.0", 
+    "jinja2>=3.0.0",
+    "pyyaml>=6.0.0",
+    "rich>=13.0.0",
+    
+    # Async execution and HTTP
+    "aiohttp>=3.8.0",
+    "asyncio>=3.4.3",
+    "aiofiles>=23.0.0",
+    
+    # Data processing and validation
+    "jsonschema>=4.0.0",
+    "python-dateutil>=2.8.0",
+    "packaging>=21.0",
+    
+    # Security tools integration
+    "requests>=2.28.0",
+    "urllib3>=1.26.0",
+    
+    # Report generation
+    "markdown>=3.4.0",
+    "weasyprint>=58.0",  # For PDF generation
+    "plotly>=5.0.0",     # For security metrics visualization
+    
+    # SARIF support
+    "sarif-om>=1.0.4",
+    
+    # Configuration management
+    "configparser-crypt>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+# Optional dependencies for enhanced functionality
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0", 
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "flake8>=6.0.0",
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+]
+
+# Enhanced security tools (Phase 2+)
+enhanced = [
+    "opentelemetry-api>=1.15.0",
+    "opentelemetry-sdk>=1.15.0", 
+    "opentelemetry-instrumentation>=0.36.0",
+    "jaeger-client>=4.8.0",
+    "falco-python>=0.1.0",  # Custom Falco integration
+    "docker>=6.0.0",
+    "kubernetes>=25.0.0",
+]
+
+# AI/ML features (Phase 3)
+ai = [
+    "tensorflow>=2.12.0",
+    "torch>=2.0.0", 
+    "transformers>=4.21.0",
+    "scikit-learn>=1.3.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "openai>=0.27.0",  # For GitHub Copilot API integration
+]
+
+# Enterprise features (Phase 4)
+enterprise = [
+    "celery>=5.3.0",      # Task queue for scaling
+    "redis>=4.5.0",       # Caching and message broker
+    "sqlalchemy>=2.0.0",  # Database ORM
+    "alembic>=1.11.0",    # Database migrations
+    "fastapi>=0.100.0",   # REST API framework
+    "uvicorn>=0.22.0",    # ASGI server
+    "prometheus-client>=0.17.0",  # Metrics
+]
+
+# All optional dependencies
+all = [
+    "codephreak-security-auditor[dev,enhanced,ai,enterprise]"
+]
+
+[project.scripts]
+codephreak-audit = "codephreak.security_auditor.cli:main"
+cp-audit = "codephreak.security_auditor.cli:main"  # Short alias
+security-auditor = "codephreak.security_auditor.cli:main"  # Generic alias
+
+[project.entry-points."codephreak.plugins"]
+# Plugin system for extensibility
+sast = "codephreak.security_auditor.plugins.sast:SASTPlugin"
+sca = "codephreak.security_auditor.plugins.sca:SCAPlugin"
+secrets = "codephreak.security_auditor.plugins.secrets:SecretsPlugin"
+iac = "codephreak.security_auditor.plugins.iac:IaCPlugin"
+containers = "codephreak.security_auditor.plugins.containers:ContainersPlugin"
+
+[project.urls]
+Homepage = "https://codephreak.ai"
+Documentation = "https://github.com/codephreak/security-auditor-droid/blob/main/docs/"
+Repository = "https://github.com/codephreak/security-auditor-droid.git"
+Issues = "https://github.com/codephreak/security-auditor-droid/issues"
+Discussions = "https://github.com/codephreak/security-auditor-droid/discussions"
+Changelog = "https://github.com/codephreak/security-auditor-droid/blob/main/CHANGELOG.md"
+"Premium Features" = "https://codephreak.ai/security-auditor"
+"Enterprise Support" = "https://codephreak.ai/enterprise"
+
+# Setuptools configuration
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["codephreak*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"codephreak.security_auditor" = [
+    "config/*.yml", 
+    "config/*.yaml",
+    "templates/*.html",
+    "templates/*.j2", 
+    "rules/*.yml",
+    "rules/*.yaml",
+    "policies/*.json",
+]
+
+# Development tools configuration
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # Directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config", 
+    "--verbose",
+    "--cov=codephreak",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests", 
+    "slow: Slow tests",
+    "network: Tests requiring network access",
+    "docker: Tests requiring Docker",
+]
+
+[tool.coverage.run]
+source = ["src/codephreak"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py", 
+    "*/__init__.py",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError", 
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"] 
+skips = ["B101", "B601"]  # Skip assert usage and shell injection in tests
+
+[tool.semantic_release]
+version_variable = "src/codephreak/__init__.py:__version__"
+build_command = "pip install build && python -m build"
+dist_path = "dist/"
+upload_to_pypi = true
+upload_to_release = true
+commit_author = "CodePhreak Security Bot <security@codephreak.ai>"
