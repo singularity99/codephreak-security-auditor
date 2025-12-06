@@ -1,0 +1,22 @@
+# Git Configuration Preferences
+# This file records the preferred git configuration for this repository
+
+# User Information
+USER_NAME=singularity99
+USER_EMAIL=suresh.kumar@gmail.com
+
+# Alternative Email Options (as specified by user):
+# 1. suresh.kumar@gmail.com (preferred)
+# 2. singularity99@users.noreply.github.com (GitHub no-reply)
+
+# Repository Information
+GITHUB_USERNAME=singularity99
+REPOSITORY_URL=https://github.com/singularity99/codephreak-security-auditor.git
+
+# Date Configured: 2025-12-06
+# Configured by: factory-droid following user specification
+
+# Instructions for future reference:
+# When working on this repository, always use:
+# git config user.name "singularity99"
+# git config user.email "suresh.kumar@gmail.com"
