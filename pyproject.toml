@@ -132,6 +132,7 @@ all = [
 codephreak-audit = "codephreak.security_auditor.cli:main"
 cp-audit = "codephreak.security_auditor.cli:main"  # Short alias
 security-auditor = "codephreak.security_auditor.cli:main"  # Generic alias
+codephreak-hybrid = "codephreak.security_auditor.enhanced_cli:cli"  # Enhanced hybrid CLI
 
 [project.entry-points."codephreak.plugins"]
 # Plugin system for extensibility
