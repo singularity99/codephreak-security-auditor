@@ -29,11 +29,11 @@ RUN apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # VULNERABILITY 5: Hardcoded secrets in environment variables
-ENV API_KEY=sk-1234567890abcdef1234567890abcdef
+ENV API_KEY=sk-test_FAKE_abcdef_FOR_TESTING_ONLY
 ENV DATABASE_URL=postgresql://admin:password123@db:5432/myapp
-ENV SECRET_TOKEN=super-secret-token-12345
-ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-ENV AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+ENV SECRET_TOKEN=super-secret-token-FAKE-FOR-TESTING
+ENV AWS_ACCESS_KEY_ID=AKIA_FAKE_TESTING_EXAMPLE
+ENV AWS_SECRET_ACCESS_KEY=FAKE_SECRET_KEY_FOR_TESTING_ONLY
 
 # VULNERABILITY 6: Using ADD instead of COPY (should be detected by Hadolint)
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/

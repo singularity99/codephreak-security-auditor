@@ -24,10 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // VULNERABILITY 1: Hardcoded Secrets (should be detected by ESLint security plugin, Gitleaks)
-const API_SECRET = "sk-live_1234567890abcdef1234567890abcdef";
+const API_SECRET = "sk-test_FAKE_1234567890abcdef_FOR_TESTING_ONLY";
 const DB_PASSWORD = "SuperSecret123!@#";
-const JWT_SECRET = "my-jwt-secret-key";
-const STRIPE_SECRET = "sk_live_51234567890abcdef1234567890abcdef";
+const JWT_SECRET = "my-jwt-secret-key-FAKE-FOR-TESTING";
+const STRIPE_SECRET = "sk_test_FAKE_567890abcdef_TESTING_ONLY";
 
 // VULNERABILITY 2: Insecure session configuration
 app.use(require('express-session')({

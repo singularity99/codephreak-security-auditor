@@ -18,10 +18,10 @@ services:
       - "3306:3306" # VULNERABILITY 4: Exposing database port
     environment:
       # VULNERABILITY 5: Hardcoded secrets in environment
-      - API_KEY=sk-live-1234567890abcdef
+      - API_KEY=sk-test_FAKE_1234567890abcdef_FOR_TESTING
       - DB_PASSWORD=admin123
-      - SECRET_KEY=my-super-secret-key
-      - JWT_SECRET=jwt-secret-key
+      - SECRET_KEY=my-super-secret-key-FAKE-FOR-TESTING
+      - JWT_SECRET=jwt-secret-key-FAKE-FOR-TESTING
     volumes:
       # VULNERABILITY 6: Mounting sensitive host directories
       - /etc:/host-etc:ro
