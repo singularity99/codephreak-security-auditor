@@ -1,0 +1,52 @@
+# Vulnerable Python Dependencies for Testing
+# These packages have known security vulnerabilities and should be detected
+# by SCA tools like Trivy, pip-audit, OWASP Dependency-Check
+
+# VULNERABILITY 1: Flask with known XSS vulnerability
+Flask==2.0.1  # CVE-2023-30861: Potential XSS vulnerability
+
+# VULNERABILITY 2: Requests with SSL verification issues  
+requests==2.25.1  # CVE-2023-32681: Proxy-Authorization header leak
+
+# VULNERABILITY 3: PyYAML with unsafe loading
+PyYAML==5.3.1  # CVE-2020-14343: Incomplete fix for arbitrary code execution
+
+# VULNERABILITY 4: Jinja2 with template injection
+Jinja2==2.11.3  # CVE-2020-28493: ReDOS vulnerability
+
+# VULNERABILITY 5: Werkzeug with debug mode issues
+Werkzeug==2.0.1  # CVE-2022-29361: Header injection vulnerability
+
+# VULNERABILITY 6: urllib3 with various issues
+urllib3==1.26.5  # CVE-2021-33503: Catastrophic backtracking in URL parsing
+
+# VULNERABILITY 7: Cryptography with weak algorithms
+cryptography==3.2  # CVE-2020-36242: Buffer overflow vulnerability
+
+# VULNERABILITY 8: Pillow with image processing vulnerabilities  
+Pillow==8.0.0  # CVE-2021-25287: Out-of-bounds read vulnerability
+
+# VULNERABILITY 9: lxml with XML external entity issues
+lxml==4.6.2  # CVE-2021-28957: HTML Cleaner allows crafted script content
+
+# VULNERABILITY 10: SQLAlchemy with SQL injection potential
+SQLAlchemy==1.3.20  # CVE-2019-7164: SQL injection when receiving a malicious URI
+
+# VULNERABILITY 11: Django with multiple issues (even though not used)
+Django==3.1.1  # CVE-2021-33203: Potential directory traversal
+
+# VULNERABILITY 12: NumPy with buffer overflow
+numpy==1.19.2  # CVE-2021-33430: Buffer overflow in PyArray_NewFromDescr_int
+
+# VULNERABILITY 13: Pandas with code execution potential
+pandas==1.1.3  # CVE-2020-13091: Arbitrary code execution
+
+# VULNERABILITY 14: Scrapy with information disclosure
+Scrapy==2.4.0  # CVE-2020-36489: Information disclosure
+
+# VULNERABILITY 15: Paramiko with authentication bypass
+paramiko==2.7.1  # CVE-2022-24302: Race condition in auth handler
+
+# Additional vulnerable packages for comprehensive testing
+setuptools==49.0.0  # CVE-2022-40897: Regular Expression Denial of Service
+pip==20.2.4  # CVE-2021-3572: Arbitrary code execution

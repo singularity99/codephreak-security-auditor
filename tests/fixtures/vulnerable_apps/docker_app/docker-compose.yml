@@ -1,0 +1,135 @@
+# Vulnerable Docker Compose - Test Fixture for CodePhreak Security Auditor
+# 
+# This intentionally vulnerable Docker Compose configuration contains multiple
+# security issues that should be detected by container security scanning tools.
+# 
+# ⚠️  WARNING: This configuration contains intentional security vulnerabilities.
+#     DO NOT use in production environments!
+
+version: '3.8'
+
+services:
+  # VULNERABILITY 1: Web service with excessive privileges
+  web:
+    build: .
+    ports:
+      - "80:80"    # VULNERABILITY 2: Binding to privileged port
+      - "22:22"    # VULNERABILITY 3: Exposing SSH port
+      - "3306:3306" # VULNERABILITY 4: Exposing database port
+    environment:
+      # VULNERABILITY 5: Hardcoded secrets in environment
+      - API_KEY=sk-live-1234567890abcdef
+      - DB_PASSWORD=admin123
+      - SECRET_KEY=my-super-secret-key
+      - JWT_SECRET=jwt-secret-key
+    volumes:
+      # VULNERABILITY 6: Mounting sensitive host directories
+      - /etc:/host-etc:ro
+      - /proc:/host-proc:ro
+      - /sys:/host-sys:ro
+      # VULNERABILITY 7: Write access to host filesystem
+      - /var/log:/app/logs:rw
+      - /tmp:/app/tmp:rw
+    # VULNERABILITY 8: Running as root (no user specification)
+    # VULNERABILITY 9: Running in privileged mode
+    privileged: true
+    # VULNERABILITY 10: Sharing host network
+    network_mode: host
+    # VULNERABILITY 11: Sharing host PID namespace
+    pid: host
+    # VULNERABILITY 12: No resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 2G  # Too high, no CPU limit
+        reservations:
+          memory: 1G
+    # VULNERABILITY 13: No restart policy or unsafe restart policy
+    restart: always
+    # VULNERABILITY 14: Mounting Docker socket (Docker-in-Docker)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # VULNERABILITY 15: Adding unnecessary capabilities
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_MODULE
+    # VULNERABILITY 16: Not dropping default capabilities
+    # cap_drop not specified
+    # VULNERABILITY 17: Disabling default security profiles
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+
+  # VULNERABILITY 18: Database with weak configuration
+  database:
+    image: mysql:5.7  # VULNERABILITY 19: Using outdated version
+    ports:
+      - "3306:3306"   # VULNERABILITY 20: Exposing database to all interfaces
+    environment:
+      # VULNERABILITY 21: Weak database credentials
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: webapp
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      # VULNERABILITY 22: Database data in insecure location
+      - ./data:/var/lib/mysql
+    # VULNERABILITY 23: No resource limits for database
+    # VULNERABILITY 24: Running database as root
+    command: --default-authentication-plugin=mysql_native_password --sql-mode=""
+
+  # VULNERABILITY 25: Redis without authentication
+  cache:
+    image: redis:latest  # VULNERABILITY 26: Using latest tag
+    ports:
+      - "6379:6379"    # VULNERABILITY 27: Exposing Redis port
+    # VULNERABILITY 28: No password protection
+    command: redis-server --appendonly yes --protected-mode no
+    # VULNERABILITY 29: Mounting host filesystem
+    volumes:
+      - /var/redis-data:/data
+
+  # VULNERABILITY 30: Insecure monitoring service
+  monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"   # VULNERABILITY 31: Exposing monitoring interface
+    volumes:
+      # VULNERABILITY 32: Access to host metrics
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    # VULNERABILITY 33: Running with excessive privileges
+    user: root
+    privileged: true
+
+  # VULNERABILITY 34: Insecure log aggregation
+  logging:
+    image: fluent/fluentd:latest
+    volumes:
+      # VULNERABILITY 35: Access to all host logs
+      - /var/log:/fluentd/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    # VULNERABILITY 36: Running logging service as root
+    user: root
+
+networks:
+  default:
+    driver: bridge
+    # VULNERABILITY 37: No network segmentation
+    # All services on same network
+
+volumes:
+  # VULNERABILITY 38: Using local driver for sensitive data
+  database_data:
+    driver: local
+  cache_data:
+    driver: local
+
+# VULNERABILITY 39: No secrets management
+# All secrets hardcoded in environment variables
+
+# VULNERABILITY 40: No health checks defined for services
+# Missing healthcheck configurations
