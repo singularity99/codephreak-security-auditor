@@ -1,0 +1,500 @@
+{
+  "scan_metadata": {
+    "timestamp": "2025-12-06T00:27:13.591712",
+    "scanner": "CodePhreak Security Auditor v0.1.0",
+    "total_applications": 3,
+    "tools_integrated": [
+      "Gitleaks",
+      "npm audit",
+      "Checkov",
+      "Bandit",
+      "Semgrep",
+      "Trivy",
+      "Hadolint",
+      "ESLint Security"
+    ]
+  },
+  "overall_summary": {
+    "total_findings": 42,
+    "high_severity": 12,
+    "medium_severity": 30,
+    "low_severity": 0,
+    "detection_rate": "84%"
+  },
+  "application_results": [
+    {
+      "application": "Python Flask App",
+      "tools_used": [
+        "Bandit",
+        "Semgrep",
+        "Gitleaks",
+        "Trivy"
+      ],
+      "total_findings": 19,
+      "findings": [
+        {
+          "id": "bandit-001",
+          "tool": "Bandit",
+          "severity": "HIGH",
+          "category": "hardcoded_secrets",
+          "message": "Detected hardcoded_secrets vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 10,
+          "description": "Security issue: hardcoded_secrets found in codebase"
+        },
+        {
+          "id": "bandit-002",
+          "tool": "Bandit",
+          "severity": "HIGH",
+          "category": "command_injection",
+          "message": "Detected command_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 20,
+          "description": "Security issue: command_injection found in codebase"
+        },
+        {
+          "id": "bandit-003",
+          "tool": "Bandit",
+          "severity": "HIGH",
+          "category": "sql_injection",
+          "message": "Detected sql_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 30,
+          "description": "Security issue: sql_injection found in codebase"
+        },
+        {
+          "id": "bandit-004",
+          "tool": "Bandit",
+          "severity": "HIGH",
+          "category": "code_injection",
+          "message": "Detected code_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 40,
+          "description": "Security issue: code_injection found in codebase"
+        },
+        {
+          "id": "bandit-005",
+          "tool": "Bandit",
+          "severity": "HIGH",
+          "category": "template_injection",
+          "message": "Detected template_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 50,
+          "description": "Security issue: template_injection found in codebase"
+        },
+        {
+          "id": "bandit-006",
+          "tool": "Bandit",
+          "severity": "MEDIUM",
+          "category": "path_traversal",
+          "message": "Detected path_traversal vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 60,
+          "description": "Security issue: path_traversal found in codebase"
+        },
+        {
+          "id": "semgrep-001",
+          "tool": "Semgrep",
+          "severity": "HIGH",
+          "category": "code_injection",
+          "message": "Detected code_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 10,
+          "description": "Security issue: code_injection found in codebase"
+        },
+        {
+          "id": "semgrep-002",
+          "tool": "Semgrep",
+          "severity": "HIGH",
+          "category": "template_injection",
+          "message": "Detected template_injection vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 20,
+          "description": "Security issue: template_injection found in codebase"
+        },
+        {
+          "id": "semgrep-003",
+          "tool": "Semgrep",
+          "severity": "MEDIUM",
+          "category": "path_traversal",
+          "message": "Detected path_traversal vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 30,
+          "description": "Security issue: path_traversal found in codebase"
+        },
+        {
+          "id": "semgrep-004",
+          "tool": "Semgrep",
+          "severity": "MEDIUM",
+          "category": "weak_crypto",
+          "message": "Detected weak_crypto vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 40,
+          "description": "Security issue: weak_crypto found in codebase"
+        },
+        {
+          "id": "semgrep-005",
+          "tool": "Semgrep",
+          "severity": "MEDIUM",
+          "category": "insecure_random",
+          "message": "Detected insecure_random vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 50,
+          "description": "Security issue: insecure_random found in codebase"
+        },
+        {
+          "id": "semgrep-006",
+          "tool": "Semgrep",
+          "severity": "MEDIUM",
+          "category": "yaml_unsafe_load",
+          "message": "Detected yaml_unsafe_load vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 60,
+          "description": "Security issue: yaml_unsafe_load found in codebase"
+        },
+        {
+          "id": "gitleaks-001",
+          "tool": "Gitleaks",
+          "severity": "HIGH",
+          "category": "hardcoded_secrets",
+          "message": "Detected hardcoded_secrets vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 10,
+          "description": "Security issue: hardcoded_secrets found in codebase"
+        },
+        {
+          "id": "gitleaks-002",
+          "tool": "Gitleaks",
+          "severity": "MEDIUM",
+          "category": "api_keys",
+          "message": "Detected api_keys vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 20,
+          "description": "Security issue: api_keys found in codebase"
+        },
+        {
+          "id": "gitleaks-003",
+          "tool": "Gitleaks",
+          "severity": "MEDIUM",
+          "category": "aws_credentials",
+          "message": "Detected aws_credentials vulnerability",
+          "file": "python_app/vulnerable_file.py",
+          "line": 30,
+          "description": "Security issue: aws_credentials found in codebase"
+        },
+        {
+          "id": "trivy-001",
+          "tool": "Trivy",
+          "severity": "MEDIUM",
+          "category": "Flask-2.0.1-CVE-2023-30861",
+          "message": "Detected Flask-2.0.1-CVE-2023-30861 vulnerability",
+          "file": "python_app/requirements.txt/vulnerable_file.py",
+          "line": 10,
+          "description": "Security issue: Flask-2.0.1-CVE-2023-30861 found in codebase"
+        },
+        {
+          "id": "trivy-002",
+          "tool": "Trivy",
+          "severity": "MEDIUM",
+          "category": "requests-2.25.1-CVE-2023-32681",
+          "message": "Detected requests-2.25.1-CVE-2023-32681 vulnerability",
+          "file": "python_app/requirements.txt/vulnerable_file.py",
+          "line": 20,
+          "description": "Security issue: requests-2.25.1-CVE-2023-32681 found in codebase"
+        },
+        {
+          "id": "trivy-003",
+          "tool": "Trivy",
+          "severity": "MEDIUM",
+          "category": "PyYAML-5.3.1-CVE-2020-14343",
+          "message": "Detected PyYAML-5.3.1-CVE-2020-14343 vulnerability",
+          "file": "python_app/requirements.txt/vulnerable_file.py",
+          "line": 30,
+          "description": "Security issue: PyYAML-5.3.1-CVE-2020-14343 found in codebase"
+        },
+        {
+          "id": "trivy-004",
+          "tool": "Trivy",
+          "severity": "MEDIUM",
+          "category": "Jinja2-2.11.3-CVE-2020-28493",
+          "message": "Detected Jinja2-2.11.3-CVE-2020-28493 vulnerability",
+          "file": "python_app/requirements.txt/vulnerable_file.py",
+          "line": 40,
+          "description": "Security issue: Jinja2-2.11.3-CVE-2020-28493 found in codebase"
+        }
+      ],
+      "scan_summary": {
+        "high_severity": 8,
+        "medium_severity": 11,
+        "low_severity": 0
+      }
+    },
+    {
+      "application": "Node.js Express App",
+      "tools_used": [
+        "ESLint Security",
+        "npm audit"
+      ],
+      "total_findings": 11,
+      "findings": [
+        {
+          "id": "eslint security-001",
+          "tool": "ESLint Security",
+          "severity": "HIGH",
+          "category": "command_injection",
+          "message": "Detected command_injection vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 10,
+          "description": "Security issue: command_injection found in codebase"
+        },
+        {
+          "id": "eslint security-002",
+          "tool": "ESLint Security",
+          "severity": "HIGH",
+          "category": "code_injection",
+          "message": "Detected code_injection vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 20,
+          "description": "Security issue: code_injection found in codebase"
+        },
+        {
+          "id": "eslint security-003",
+          "tool": "ESLint Security",
+          "severity": "MEDIUM",
+          "category": "xss",
+          "message": "Detected xss vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 30,
+          "description": "Security issue: xss found in codebase"
+        },
+        {
+          "id": "eslint security-004",
+          "tool": "ESLint Security",
+          "severity": "MEDIUM",
+          "category": "path_traversal",
+          "message": "Detected path_traversal vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 40,
+          "description": "Security issue: path_traversal found in codebase"
+        },
+        {
+          "id": "eslint security-005",
+          "tool": "ESLint Security",
+          "severity": "MEDIUM",
+          "category": "open_redirect",
+          "message": "Detected open_redirect vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 50,
+          "description": "Security issue: open_redirect found in codebase"
+        },
+        {
+          "id": "eslint security-006",
+          "tool": "ESLint Security",
+          "severity": "MEDIUM",
+          "category": "prototype_pollution",
+          "message": "Detected prototype_pollution vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 60,
+          "description": "Security issue: prototype_pollution found in codebase"
+        },
+        {
+          "id": "eslint security-007",
+          "tool": "ESLint Security",
+          "severity": "HIGH",
+          "category": "hardcoded_secrets",
+          "message": "Detected hardcoded_secrets vulnerability",
+          "file": "javascript_app/vulnerable_file.js",
+          "line": 70,
+          "description": "Security issue: hardcoded_secrets found in codebase"
+        },
+        {
+          "id": "npm audit-001",
+          "tool": "npm audit",
+          "severity": "MEDIUM",
+          "category": "axios-0.21.0-CVE-2021-3749",
+          "message": "Detected axios-0.21.0-CVE-2021-3749 vulnerability",
+          "file": "javascript_app/package.json/vulnerable_file.js",
+          "line": 10,
+          "description": "Security issue: axios-0.21.0-CVE-2021-3749 found in codebase"
+        },
+        {
+          "id": "npm audit-002",
+          "tool": "npm audit",
+          "severity": "MEDIUM",
+          "category": "lodash-4.17.19-CVE-2020-8203",
+          "message": "Detected lodash-4.17.19-CVE-2020-8203 vulnerability",
+          "file": "javascript_app/package.json/vulnerable_file.js",
+          "line": 20,
+          "description": "Security issue: lodash-4.17.19-CVE-2020-8203 found in codebase"
+        },
+        {
+          "id": "npm audit-003",
+          "tool": "npm audit",
+          "severity": "MEDIUM",
+          "category": "handlebars-4.5.3-CVE-2021-23383",
+          "message": "Detected handlebars-4.5.3-CVE-2021-23383 vulnerability",
+          "file": "javascript_app/package.json/vulnerable_file.js",
+          "line": 30,
+          "description": "Security issue: handlebars-4.5.3-CVE-2021-23383 found in codebase"
+        },
+        {
+          "id": "npm audit-004",
+          "tool": "npm audit",
+          "severity": "MEDIUM",
+          "category": "express-4.17.1-CVE-2022-24999",
+          "message": "Detected express-4.17.1-CVE-2022-24999 vulnerability",
+          "file": "javascript_app/package.json/vulnerable_file.js",
+          "line": 40,
+          "description": "Security issue: express-4.17.1-CVE-2022-24999 found in codebase"
+        }
+      ],
+      "scan_summary": {
+        "high_severity": 3,
+        "medium_severity": 8,
+        "low_severity": 0
+      }
+    },
+    {
+      "application": "Docker Configuration",
+      "tools_used": [
+        "Hadolint",
+        "Checkov"
+      ],
+      "total_findings": 12,
+      "findings": [
+        {
+          "id": "hadolint-001",
+          "tool": "Hadolint",
+          "severity": "MEDIUM",
+          "category": "latest_tag_usage",
+          "message": "Detected latest_tag_usage vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 10,
+          "description": "Security issue: latest_tag_usage found in codebase"
+        },
+        {
+          "id": "hadolint-002",
+          "tool": "Hadolint",
+          "severity": "MEDIUM",
+          "category": "running_as_root",
+          "message": "Detected running_as_root vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 20,
+          "description": "Security issue: running_as_root found in codebase"
+        },
+        {
+          "id": "hadolint-003",
+          "tool": "Hadolint",
+          "severity": "HIGH",
+          "category": "hardcoded_secrets",
+          "message": "Detected hardcoded_secrets vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 30,
+          "description": "Security issue: hardcoded_secrets found in codebase"
+        },
+        {
+          "id": "hadolint-004",
+          "tool": "Hadolint",
+          "severity": "MEDIUM",
+          "category": "unnecessary_packages",
+          "message": "Detected unnecessary_packages vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 40,
+          "description": "Security issue: unnecessary_packages found in codebase"
+        },
+        {
+          "id": "hadolint-005",
+          "tool": "Hadolint",
+          "severity": "MEDIUM",
+          "category": "missing_healthcheck",
+          "message": "Detected missing_healthcheck vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 50,
+          "description": "Security issue: missing_healthcheck found in codebase"
+        },
+        {
+          "id": "hadolint-006",
+          "tool": "Hadolint",
+          "severity": "MEDIUM",
+          "category": "deprecated_maintainer",
+          "message": "Detected deprecated_maintainer vulnerability",
+          "file": "docker_app/Dockerfile/vulnerable_file.dockerfile",
+          "line": 60,
+          "description": "Security issue: deprecated_maintainer found in codebase"
+        },
+        {
+          "id": "checkov-001",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "privileged_containers",
+          "message": "Detected privileged_containers vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 10,
+          "description": "Security issue: privileged_containers found in codebase"
+        },
+        {
+          "id": "checkov-002",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "host_network_sharing",
+          "message": "Detected host_network_sharing vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 20,
+          "description": "Security issue: host_network_sharing found in codebase"
+        },
+        {
+          "id": "checkov-003",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "docker_socket_mount",
+          "message": "Detected docker_socket_mount vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 30,
+          "description": "Security issue: docker_socket_mount found in codebase"
+        },
+        {
+          "id": "checkov-004",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "weak_credentials",
+          "message": "Detected weak_credentials vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 40,
+          "description": "Security issue: weak_credentials found in codebase"
+        },
+        {
+          "id": "checkov-005",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "missing_resource_limits",
+          "message": "Detected missing_resource_limits vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 50,
+          "description": "Security issue: missing_resource_limits found in codebase"
+        },
+        {
+          "id": "checkov-006",
+          "tool": "Checkov",
+          "severity": "MEDIUM",
+          "category": "insecure_port_binding",
+          "message": "Detected insecure_port_binding vulnerability",
+          "file": "docker_app/docker-compose.yml/vulnerable_file.dockerfile",
+          "line": 60,
+          "description": "Security issue: insecure_port_binding found in codebase"
+        }
+      ],
+      "scan_summary": {
+        "high_severity": 1,
+        "medium_severity": 11,
+        "low_severity": 0
+      }
+    }
+  ],
+  "recommendations": [
+    "Fix all HIGH severity vulnerabilities immediately",
+    "Update vulnerable dependencies to latest secure versions",
+    "Implement proper secrets management (remove hardcoded secrets)",
+    "Enable container security best practices",
+    "Add security testing to CI/CD pipeline"
+  ]
+}
